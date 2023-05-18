@@ -1,5 +1,7 @@
 import futures.util.format
 import futures.util.formatS
+import java.awt.Frame
+import javax.swing.JFrame
 
 fun main() {
 
@@ -21,5 +23,12 @@ fun main() {
                     "\n"
         )
     }
+
+
+    val frame = JFrame()
+    frame.add(samples)
+    frame.setSize(samples.screenMax, samples.screenMax)
+    frame.isVisible = true
+    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 
 }
