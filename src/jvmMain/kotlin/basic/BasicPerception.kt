@@ -1,5 +1,6 @@
 package basic
 
+import kotlin.math.exp
 import kotlin.math.pow
 import kotlin.math.sign
 
@@ -17,13 +18,12 @@ data class BasicPerception(
         w1 = (Math.random() - 0.5) * 2.0
     }
 
-    private fun step(value: Double): Int {
-        return if (value > 0) 1 else 0
-    }
+
 
     private fun guess(x0: Double, x1: Double): Int {
         val total = x0 * w0 + x1 * w1 + bias * wBias
-        return step(total)
+        val sigmoid = sigmoid(total)
+        return if(sigmoid > 0.5) 1 else 0
     }
 
     fun createGuesses(input0s: List<Double>, input1s: List<Double>, count: Int): List<Int> {
@@ -51,6 +51,14 @@ data class BasicPerception(
 
     fun interceptX1(): Double {
         return ((-w1 * -10.0) - wBias) / w0
+    }
+
+    private fun step(value: Double): Int {
+        return if (value > 0) 1 else 0
+    }
+
+    private fun sigmoid(value: Double): Double{
+        return 1 / (1 + exp(-value))
     }
 
 }
