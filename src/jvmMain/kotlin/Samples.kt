@@ -1,3 +1,4 @@
+import futures.util.formatS
 import futures.util.map
 import java.awt.Color
 import java.awt.Graphics
@@ -10,6 +11,7 @@ class Samples : JPanel() {
     val input0s = mutableListOf<Double>()
     val input1s = mutableListOf<Double>()
     val outputs = mutableListOf<Int>()
+    val guesses = mutableListOf<Int>()
 
     val sampleMin = -10.0
     val sampleMax = 10.0
@@ -43,10 +45,26 @@ class Samples : JPanel() {
                 val i0 = input0s[i].map(sampleMin, sampleMax, screenMin, screenMax).toInt()
                 val i1 = input1s[i].map(sampleMin, sampleMax, screenMin, screenMax).toInt()
                 it.color = if (outputs[i] == 1) Color.green else Color.red
-                it.fillOval(i0, screenMax - i1, (screenMax * 0.0175).toInt(), (screenMax * 0.0175).toInt())
+                it.fillOval(i0, screenMax - i1, (screenMax * 0.02).toInt(), (screenMax * 0.02).toInt())
+
+                it.color = if (guesses[i] == outputs[i]) Color.white else Color.black
+                it.fillOval(i0 + (screenMax * 0.005).toInt(), screenMax - i1 + (screenMax * 0.005).toInt(), (screenMax * 0.01).toInt(), (screenMax * 0.01).toInt())
+
             }
 
         }
+    }
+
+    override fun toString(): String {
+        var string = ""
+        for (i in 0 until sampleCount) {
+            string += "x0: ${input0s[i].formatS(2)}\t|\tx1: ${input1s[i].formatS(2)}" +
+                    "\t->\t original: ${outputs[i]}" +
+                    "\t|\tguess: ${guesses[i]}" +
+                    "\t|\t${if (outputs[i] == guesses[i]) "Success" else "Failure"}" +
+                    "\n"
+        }
+        return string
     }
 
 }

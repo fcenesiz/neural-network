@@ -13,4 +13,14 @@ data class BasicPerception(
         return if (total > 0) 1 else 0
     }
 
+    fun createGuesses(input0s : List<Double>, input1s : List<Double>, count: Int) : List<Int>{
+        val results = mutableListOf<Int>()
+        for (i in 0 until count){
+            results.add(guess(input0s[i], input1s[i]))
+        }
+        return results
+    }
+
+
+
 }

@@ -6,23 +6,19 @@ import javax.swing.JFrame
 fun main() {
 
     val basicPerception = BasicPerception()
+    basicPerception.prepare()
 
     val samples = Samples()
     samples.create()
 
-    for (i in 0 until samples.sampleCount) {
-        val guess = basicPerception.guess(
-            samples.input0s[i],
-            samples.input1s[i]
-        )
-        print(
-            "x0: ${samples.input0s[i].formatS(2)}\t|\tx1: ${samples.input1s[i].formatS(2)}" +
-                    "\t->\t original: ${samples.outputs[i]}" +
-                    "\t|\tguess: $guess" +
-                    "\t|\t${if (samples.outputs[i] == guess) "Success" else "Failure"}" +
-                    "\n"
-        )
-    }
+    samples.guesses.addAll(
+        basicPerception
+            .createGuesses(samples.input0s, samples.input1s, samples.sampleCount)
+    )
+
+
+
+    println(samples)
 
 
     val frame = JFrame()
