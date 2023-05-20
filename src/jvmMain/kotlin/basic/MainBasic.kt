@@ -11,10 +11,8 @@ fun main() {
     val samples = Samples()
     samples.create()
 
-    samples.guesses.addAll(
-        basicPerception
-            .createGuesses(samples.input0s, samples.input1s, samples.count)
-    )
+    samples.guesses = basicPerception
+        .createGuesses(samples.input0s, samples.input1s, samples.count)
 
     val frame = JFrame()
     frame.add(samples)
@@ -30,12 +28,9 @@ fun main() {
             samples.input1s[i % samples.count],
             samples.outputs[i % samples.count]
         )
-        samples.guesses.clear()
-        samples.guesses.addAll(
-            basicPerception.createGuesses(
-                samples.input0s, samples.input1s, samples.count
-            )
-        )
+
+        samples.guesses = basicPerception
+            .createGuesses(samples.input0s, samples.input1s, samples.count)
 
 
 

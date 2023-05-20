@@ -1,4 +1,4 @@
-package nn21
+package nn21better
 
 import Samples
 import java.util.*
@@ -7,7 +7,7 @@ import javax.swing.JFrame
 fun main() {
 
 
-    val basicPerception = NN21()
+    val basicPerception = NN21Better()
     basicPerception.prepare()
 
     val samples = Samples()
@@ -28,7 +28,7 @@ fun main() {
     val timer = Timer();
     var idx = 0
 
-    timer.scheduleAtFixedRate(object : TimerTask(){
+    timer.scheduleAtFixedRate(object : TimerTask() {
         override fun run() {
 
             basicPerception.train(
@@ -36,6 +36,8 @@ fun main() {
                 samples.input1s[idx % samples.count],
                 samples.outputs[idx % samples.count]
             )
+
+
             samples.guesses = basicPerception
                 .createGuesses(samples.input0s, samples.input1s, samples.count)
 
@@ -44,7 +46,6 @@ fun main() {
             idx = (idx + 1) % samples.count
         }
     }, 0, 1)
-
 
 
 }

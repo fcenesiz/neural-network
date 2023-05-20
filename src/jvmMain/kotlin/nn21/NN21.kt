@@ -2,6 +2,10 @@ package nn21
 
 import kotlin.math.exp
 
+/**
+ * Neural network 2x1
+ * activation func: sigmoid
+ */
 class NN21(
     val learningRate: Double = 0.1
 ) {
@@ -60,10 +64,10 @@ class NN21(
         return sigmoid(totalH)
     }
 
-    fun createGuesses(input0s: List<Double>, input1s: List<Double>, count: Int): List<Int> {
-        val results = mutableListOf<Int>()
+    fun createGuesses(input0s: DoubleArray, input1s: DoubleArray, count: Int): IntArray {
+        val results = IntArray(count)
         for (i in 0 until count) {
-            results.add(if(guess(input0s[i], input1s[i]) > 0.5) 1 else 0)
+            results[i] = if(guess(input0s[i], input1s[i]) > 0.5) 1 else 0
         }
         return results
     }

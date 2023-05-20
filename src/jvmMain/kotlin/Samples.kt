@@ -5,35 +5,36 @@ import kotlin.math.absoluteValue
 
 class Samples : JPanel() {
 
-    val count = 200
-    val input0s = mutableListOf<Double>()
-    val input1s = mutableListOf<Double>()
-    val outputs = mutableListOf<Int>()
-    val guesses = mutableListOf<Int>()
+    val count = 250
+    val input0s = DoubleArray(count)
+    val input1s = DoubleArray(count)
+    val outputs = IntArray(count)
+    var guesses = IntArray(count)
 
     val sampleMin = -10.0
     val sampleMax = 10.0
 
     val screenMin = 0
-    val screenMax = 500
+    val screenMax = 640
 
     var trueRate = 0.0
 
+
     fun create(): Samples {
         for (i in 0 until count) {
-            input0s.add((Math.random() - 0.5) * 20.0)
-            input1s.add((Math.random() - 0.5) * 20.0)
+            input0s[i] = (Math.random() - 0.5) * 20.0
+            input1s[i] = (Math.random() - 0.5) * 20.0
 
-            outputs.add(if ( creationCondition(input0s[i], input1s[i]) ) 1 else 0)
+            outputs[i] = if ( creationCondition(input0s[i], input1s[i]) ) 1 else 0
         }
         return this
     }
 
     private fun creationCondition(x0: Double, x1: Double): Boolean {
-        //return x0 + 7 > x1
+        return x0 + 7 > x1
 
         // f(x,y) = |x - y| < 3
-        return (x0 - x1).absoluteValue < 3
+        //return (x0 - x1).absoluteValue < 3
     }
 
     override fun paint(g: Graphics?) {
