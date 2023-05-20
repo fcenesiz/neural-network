@@ -1,5 +1,6 @@
 package basic
 
+import Samples
 import javax.swing.JFrame
 
 fun main() {
@@ -12,7 +13,7 @@ fun main() {
 
     samples.guesses.addAll(
         basicPerception
-            .createGuesses(samples.input0s, samples.input1s, samples.sampleCount)
+            .createGuesses(samples.input0s, samples.input1s, samples.count)
     )
 
     val frame = JFrame()
@@ -21,26 +22,28 @@ fun main() {
     frame.isVisible = true
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 
-    for (i in 0 until 534) {
+    println(samples)
+
+    for (i in 0 until 5034) {
         basicPerception.train(
-            samples.input0s[i % samples.sampleCount],
-            samples.input1s[i % samples.sampleCount],
-            samples.outputs[i % samples.sampleCount]
+            samples.input0s[i % samples.count],
+            samples.input1s[i % samples.count],
+            samples.outputs[i % samples.count]
         )
         samples.guesses.clear()
         samples.guesses.addAll(
             basicPerception.createGuesses(
-                samples.input0s, samples.input1s, samples.sampleCount
+                samples.input0s, samples.input1s, samples.count
             )
         )
 
-        samples.interceptX0 = basicPerception.interceptX0().toInt()
-        samples.interceptX1 = basicPerception.interceptX1().toInt()
+
 
         samples.repaint()
         //frame.repaint()
 
-        Thread.sleep(25)
+        Thread.sleep(5)
     }
+
 
 }

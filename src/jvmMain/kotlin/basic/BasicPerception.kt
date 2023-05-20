@@ -20,29 +20,28 @@ data class BasicPerception(
 
 
 
-    private fun guess(x0: Double, x1: Double): Int {
+    private fun guess(x0: Double, x1: Double): Double {
         val total = x0 * w0 + x1 * w1 + bias * wBias
-        val sigmoid = sigmoid(total)
-        return if(sigmoid > 0.5) 1 else 0
+        return sigmoid(total)
     }
 
     fun createGuesses(input0s: List<Double>, input1s: List<Double>, count: Int): List<Int> {
         val results = mutableListOf<Int>()
         for (i in 0 until count) {
-            results.add(guess(input0s[i], input1s[i]))
+            results.add(if(guess(input0s[i], input1s[i]) > 0.5) 1 else 0)
         }
         return results
     }
 
     fun train(x0: Double, x1: Double, output: Int) {
         val guess = guess(x0, x1)
-        val delta = (output - guess).toDouble()
+        val delta = output - guess
         // error rate
-        val error = delta.sign * 0.5 * delta.pow(2.0)
+        val error = -delta
 
-        wBias += error * bias * learningRate
-        w0 += error * x0 * learningRate
-        w1 += error * x1 * learningRate
+        wBias -= guess * (1.0 - guess) * error * learningRate
+        w0 -= x0 * guess * (1.0 - guess) * error * learningRate
+        w1 -= x1 * guess * (1.0 - guess) * error * learningRate
     }
 
     fun interceptX0(): Double {
@@ -51,10 +50,6 @@ data class BasicPerception(
 
     fun interceptX1(): Double {
         return ((-w1 * -10.0) - wBias) / w0
-    }
-
-    private fun step(value: Double): Int {
-        return if (value > 0) 1 else 0
     }
 
     private fun sigmoid(value: Double): Double{
