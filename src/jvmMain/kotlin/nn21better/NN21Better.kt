@@ -1,13 +1,15 @@
 package nn21better
 
+import java.awt.Color
 import kotlin.math.exp
+import kotlin.math.max
 
 /**
  * Neural network 2x1
  * activation func: sigmoid
  */
 class NN21Better(
-    val learningRate: Double = 0.1
+    val learningRate: Double = 0.01
 ) {
 
     var w00: Double = 0.0
@@ -61,10 +63,14 @@ class NN21Better(
 
         val totalH = (h0 * wh0) + (h1 * wh1) + whb
 
-        return act(totalH)
+        return sigmoid(totalH)
     }
 
-    fun createGuesses(input0s: DoubleArray, input1s: DoubleArray, count: Int): IntArray {
+    fun createGuesses(
+        input0s: DoubleArray,
+        input1s: DoubleArray,
+        count: Int
+    ): IntArray {
         val results = IntArray(count)
         for (i in 0 until count) {
             results[i] = if (guess(input0s[i], input1s[i]) > 0.5) 1 else 0
@@ -72,14 +78,32 @@ class NN21Better(
         return results
     }
 
+    fun accuracy(
+        outputs: IntArray,
+        guesses: IntArray,
+        colors: Array<Color>,
+        count: Int
+    ): Double {
+        var trueOne = 0.0
+
+        for (i in 0 until count) {
+            if (guesses[i] == outputs[i]){
+                trueOne++
+                colors[i] = Color.white
+            }else{
+                colors[i] = Color.black
+            }
+        }
+        return trueOne / count
+    }
 
     fun train(x0: Double, x1: Double, output: Int) {
         val guess = guess(x0, x1)
         val errorGuess = output - guess
 
         // hidden layer
-        // dy = e(y) * der(y)
-        val dGuess = errorGuess * dAct(guess)
+        // dy = e(y) * dSigmoid(y)
+        val dGuess = errorGuess * dSigmoid(guess)
         dwh0 = h0 * dGuess
         dwh1 = h1 * dGuess
         dwhb = dGuess
@@ -119,21 +143,40 @@ class NN21Better(
     }
 
     private fun act(value: Double): Double {
-        return sigmoid(value)
-    }
-
-    // ∂Act(x);derivative of act
-    private fun dAct(value: Double): Double {
-        return dSigmoid(value)
+        return reluLeaky(value)
     }
 
     private fun sigmoid(value: Double): Double {
         return 1 / (1 + exp(-value))
     }
 
+    private fun relu(value: Double): Double {
+        return max(0.0, value)
+    }
+
+    val leakyAlpha = 0.3
+    private fun reluLeaky(value: Double): Double {
+        return max(value * leakyAlpha, value)
+    }
+
+    // ∂Act(x);derivative of act
+    private fun dAct(value: Double): Double {
+        return dReluLeaky(value)
+    }
+
     // ∂Sigmoid(x);derivative of sigmoid
     private fun dSigmoid(value: Double): Double {
         return value * (1.0 - value)
+    }
+
+    // ∂Relu(x);derivative of relu
+    private fun dRelu(value: Double): Double {
+        return if (value > 0.0) 1.0 else 0.0
+    }
+
+    // ∂ReluLeaky(x);derivative of reluLeaky
+    private fun dReluLeaky(value: Double): Double {
+        return if (value > 0.0) 1.0 else leakyAlpha
     }
 
 }

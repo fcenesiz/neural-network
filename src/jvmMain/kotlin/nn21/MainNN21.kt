@@ -1,6 +1,7 @@
 package nn21
 
 import Samples
+import SamplesOld
 import java.util.*
 import javax.swing.JFrame
 
@@ -10,7 +11,7 @@ fun main() {
     val basicPerception = NN21()
     basicPerception.prepare()
 
-    val samples = Samples()
+    val samples = SamplesOld()
     samples.create()
 
     samples.guesses = basicPerception
