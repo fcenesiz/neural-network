@@ -1,6 +1,6 @@
 package nn21better
 
-import Samples
+import SamplesNN21
 import formatS
 import java.util.*
 import javax.swing.JFrame
@@ -12,47 +12,47 @@ fun main() {
     val network = NN21Better(0.1)
     network.prepare()
 
-    val samples = Samples()
-    samples.create()
+    val samplesNN21 = SamplesNN21()
+    samplesNN21.create()
 
-    samples.guesses = network
-        .createGuesses(samples.input0s, samples.input1s, samples.count)
+    samplesNN21.guesses = network
+        .createGuesses(samplesNN21.input0s, samplesNN21.input1s, samplesNN21.count)
 
     val frame = JFrame()
-    frame.add(samples)
-    frame.setSize(samples.screenMax, samples.screenMax)
+    frame.add(samplesNN21)
+    frame.setSize(samplesNN21.screenMax, samplesNN21.screenMax)
     frame.isVisible = true
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 
-    println(samples)
+    println(samplesNN21)
 
-    other(network, samples, 10000)
+    other(network, samplesNN21, 10000)
     //limited(network, samples, 10000)
     //endless(network, samples)
 
 }
 
-fun limited(network: NN21Better, samples: Samples, limit: Int) {
+fun limited(network: NN21Better, samplesNN21: SamplesNN21, limit: Int) {
     var idx = 0
 
     for (i in 0 until limit) {
         network.train(
-            samples.input0s[idx],
-            samples.input1s[idx],
-            samples.outputs[idx]
+            samplesNN21.input0s[idx],
+            samplesNN21.input1s[idx],
+            samplesNN21.outputs[idx]
         )
 
         idx += 1
-        if (idx >= samples.count) {
-            samples.repaint()
+        if (idx >= samplesNN21.count) {
+            samplesNN21.repaint()
             // Passed over all samples,
             // calculate accuracy,
-            samples.guesses = network.createGuesses(samples.input0s, samples.input1s, samples.count)
-            val accuracy = network.accuracy(samples.outputs, samples.guesses, samples.colors, samples.count)
+            samplesNN21.guesses = network.createGuesses(samplesNN21.input0s, samplesNN21.input1s, samplesNN21.count)
+            val accuracy = network.accuracy(samplesNN21.outputs, samplesNN21.guesses, samplesNN21.colors, samplesNN21.count)
             println("accuracy: ${accuracy.formatS(2)}")
 
             // mixing for new "epoch"
-            samples.mix()
+            samplesNN21.mix()
             idx = 0
         }
     }
@@ -60,50 +60,50 @@ fun limited(network: NN21Better, samples: Samples, limit: Int) {
 }
 
 
-fun endless(network: NN21Better, samples: Samples) {
+fun endless(network: NN21Better, samplesNN21: SamplesNN21) {
     val timer = Timer();
     var idx = 0
 
     timer.scheduleAtFixedRate(object : TimerTask() {
         override fun run() {
             network.train(
-                samples.input0s[idx],
-                samples.input1s[idx],
-                samples.outputs[idx]
+                samplesNN21.input0s[idx],
+                samplesNN21.input1s[idx],
+                samplesNN21.outputs[idx]
             )
 
             idx += 1
-            if (idx >= samples.count) {
+            if (idx >= samplesNN21.count) {
                 // Passed over all samples,
                 // calculate accuracy,
-                samples.guesses = network.createGuesses(samples.input0s, samples.input1s, samples.count)
-                val accuracy = network.accuracy(samples.outputs, samples.guesses, samples.colors, samples.count)
+                samplesNN21.guesses = network.createGuesses(samplesNN21.input0s, samplesNN21.input1s, samplesNN21.count)
+                val accuracy = network.accuracy(samplesNN21.outputs, samplesNN21.guesses, samplesNN21.colors, samplesNN21.count)
                 println("accuracy: ${accuracy.formatS(2)}")
 
                 // mixing for new "epoch"
-                samples.mix()
+                samplesNN21.mix()
                 idx = 0
             }
 
-            samples.repaint()
+            samplesNN21.repaint()
         }
     }, 0, 1)
 }
 
-fun other(network: NN21Better, samples: Samples, limit: Int) {
+fun other(network: NN21Better, samplesNN21: SamplesNN21, limit: Int) {
 
     for (epoch in 0 until limit) {
-        for (idx in 0 until samples.count) {
-            network.train(samples.input0s[idx], samples.input1s[idx], samples.outputs[idx])
+        for (idx in 0 until samplesNN21.count) {
+            network.train(samplesNN21.input0s[idx], samplesNN21.input1s[idx], samplesNN21.outputs[idx])
         }
 
-        samples.guesses = network.createGuesses(samples.input0s, samples.input1s, samples.count)
-        val accuracy = network.accuracy(samples.outputs, samples.guesses, samples.colors, samples.count)
+        samplesNN21.guesses = network.createGuesses(samplesNN21.input0s, samplesNN21.input1s, samplesNN21.count)
+        val accuracy = network.accuracy(samplesNN21.outputs, samplesNN21.guesses, samplesNN21.colors, samplesNN21.count)
         println("accuracy: ${accuracy.formatS(2)}")
-        samples.repaint()
+        samplesNN21.repaint()
 
         // mixing for new "epoch"
-        samples.mix()
+        samplesNN21.mix()
 
     }
 }

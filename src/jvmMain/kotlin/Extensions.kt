@@ -80,6 +80,20 @@ fun Double.map(iStart: Double, iEnd: Double, oStart: Int, oEnd: Int) : Double{
     return oStart + (oEnd - oStart) * ((this - iStart) / (iEnd - iStart))
 }
 
+fun DoubleArray.shuffle(dim : Double, mul: Double){
+   for (idx in indices){
+       this[idx] = (Math.random() - dim) * mul
+   }
+}
+
+fun Array<DoubleArray>.shuffle(dim: Double, mul: Double){
+    for (i in indices){
+        for (j in this[i].indices){
+            this[i][j] = (Math.random() - dim) * mul
+        }
+    }
+}
+
 /**
  * example:
  *

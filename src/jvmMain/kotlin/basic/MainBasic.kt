@@ -1,6 +1,6 @@
 package basic
 
-import Samples
+import SamplesNN21
 import javax.swing.JFrame
 
 fun main() {
@@ -8,33 +8,33 @@ fun main() {
     val basicPerception = BasicPerception()
     basicPerception.prepare()
 
-    val samples = Samples()
-    samples.create()
+    val samplesNN21 = SamplesNN21()
+    samplesNN21.create()
 
-    samples.guesses = basicPerception
-        .createGuesses(samples.input0s, samples.input1s, samples.count)
+    samplesNN21.guesses = basicPerception
+        .createGuesses(samplesNN21.input0s, samplesNN21.input1s, samplesNN21.count)
 
     val frame = JFrame()
-    frame.add(samples)
-    frame.setSize(samples.screenMax, samples.screenMax)
+    frame.add(samplesNN21)
+    frame.setSize(samplesNN21.screenMax, samplesNN21.screenMax)
     frame.isVisible = true
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 
-    println(samples)
+    println(samplesNN21)
 
     for (i in 0 until 5034) {
         basicPerception.train(
-            samples.input0s[i % samples.count],
-            samples.input1s[i % samples.count],
-            samples.outputs[i % samples.count]
+            samplesNN21.input0s[i % samplesNN21.count],
+            samplesNN21.input1s[i % samplesNN21.count],
+            samplesNN21.outputs[i % samplesNN21.count]
         )
 
-        samples.guesses = basicPerception
-            .createGuesses(samples.input0s, samples.input1s, samples.count)
+        samplesNN21.guesses = basicPerception
+            .createGuesses(samplesNN21.input0s, samplesNN21.input1s, samplesNN21.count)
 
 
 
-        samples.repaint()
+        samplesNN21.repaint()
         //frame.repaint()
 
         Thread.sleep(5)

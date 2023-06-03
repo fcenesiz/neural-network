@@ -1,16 +1,14 @@
 import java.awt.Color
 import java.awt.Graphics
 import javax.swing.JPanel
-import kotlin.math.absoluteValue
 
-class Samples : JPanel() {
+class SamplesBasic : JPanel() {
 
     val count = 250
     val input0s = DoubleArray(count)
     val input1s = DoubleArray(count)
     val outputs = IntArray(count)
     var guesses = IntArray(count)
-    var colors  = Array<Color>(count) {Color.blue}
 
     val sampleMin = -10.0
     val sampleMax = 10.0
@@ -18,8 +16,10 @@ class Samples : JPanel() {
     val screenMin = 0
     val screenMax = 640
 
+    var trueRate = 0.0
 
-    fun create(): Samples {
+
+    fun create(): SamplesBasic {
         for (i in 0 until count) {
             input0s[i] = (Math.random() - 0.5) * 20.0
             input1s[i] = (Math.random() - 0.5) * 20.0
@@ -30,16 +30,14 @@ class Samples : JPanel() {
     }
 
     private fun creationCondition(x0: Double, x1: Double): Boolean {
-        //return x0 + 7 > x1
+        return x0 + 7 > x1
 
-        // more complex
         // f(x,y) = |x - y| < 3
-        return (x0 - x1).absoluteValue < 3
+        //return (x0 - x1).absoluteValue < 3
     }
 
     fun mix(){
         var tempIdx: Int
-        var tempColor: Color
         var temp: Double
         for (i in 0 until count) {
             tempIdx = (Math.random() * count).toInt()
@@ -54,10 +52,6 @@ class Samples : JPanel() {
             temp = outputs[i].toDouble()
             outputs[i] = outputs[tempIdx]
             outputs[tempIdx] = temp.toInt()
-
-            tempColor = colors[i]
-            colors[i] = colors[tempIdx]
-            colors[tempIdx] = tempColor
         }
     }
 
@@ -70,22 +64,22 @@ class Samples : JPanel() {
             it.drawLine((screenMax * 0.5).toInt(), 0, (screenMax * 0.5).toInt(), screenMax)
             it.drawLine(0, (screenMax * 0.5).toInt(), screenMax, (screenMax * 0.5).toInt())
 
-
+            var trueOne = 0.0
             for (i in 0 until count) {
                 val i0 = map(input0s[i])
                 val i1 = map(input1s[i])
 
                 val bigCircleSize = (screenMax * 0.025).toInt()
                 it.color = if (outputs[i] == 1) Color.green else Color.red
-                it.fillOval(
-                    i0 - bigCircleSize / 2,
-                    screenMax - i1 - bigCircleSize / 2,
-                    bigCircleSize,
-                    bigCircleSize
-                )
+                it.fillOval(i0 - bigCircleSize / 2, screenMax - i1 - bigCircleSize / 2, bigCircleSize, bigCircleSize)
+
+
+                val circleColor = if (guesses[i] == outputs[i]) Color.white else Color.black
+
+                if (circleColor == Color.white) trueOne++
 
                 val smallCircleSize = (screenMax * 0.0125).toInt()
-                it.color = colors[i]
+                it.color = circleColor
                 it.fillOval(
                     i0 - smallCircleSize / 2,
                     screenMax - i1 - smallCircleSize / 2,
@@ -94,7 +88,7 @@ class Samples : JPanel() {
                 )
 
             }
-
+            trueRate = trueOne / count
         }
     }
 
@@ -110,7 +104,7 @@ class Samples : JPanel() {
         var string = ""
         for (i in 0 until count) {
             string += "x0: ${input0s[i].formatS(2)}\t|\tx1: ${input1s[i].formatS(2)}" +
-                    "\t->\t output: ${outputs[i]}" +
+                    "\t->\t original: ${outputs[i]}" +
                     "\t|\tguess: ${guesses[i]}" +
                     "\t|\t${if (outputs[i] == guesses[i]) "Success" else "Failure"}" +
                     "\n"
