@@ -19,7 +19,9 @@ fun Double.percent(value: Double) : Double{
     }
 }
 
-
+fun Double.random() : Double{
+    return Math.random() * this
+}
 
 fun Long.timeDiffInSeconds() : Double{
     return this / 1000.0

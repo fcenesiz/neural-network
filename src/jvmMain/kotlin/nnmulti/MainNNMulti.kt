@@ -8,7 +8,7 @@ fun main() {
 
     val epoch = 1000
 
-    val network = NNMulti(2,16, 2, 0.1)
+    val network = NNMulti(2,32, 2, 0.0001)
 
     val samples = SamplesNNMulti(maxAcc = 100)
     samples.create()
@@ -35,7 +35,7 @@ fun other(network: NNMulti, samples: SamplesNNMulti, limit: Int) {
         }
         var accuracy = network.calculateAccuracy(samples.inputs, samples.count, samples.outputs)
 
-        //println("accuracy: $accuracy\t|\tepoch: $epoch")
+        println("accuracy: $accuracy\t|\tepoch: $epoch")
 
         // mixing for new "epoch"
         samples.mix()

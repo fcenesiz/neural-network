@@ -1,5 +1,6 @@
 import java.awt.Color
 import java.awt.Graphics
+import java.lang.Math.random
 import javax.swing.JPanel
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
@@ -23,8 +24,8 @@ class SamplesNNMulti(
 
     fun create(): SamplesNNMulti {
         for (i in 0 until count) {
-            inputs[i][0] = (Math.random() - 0.5) * 20.0
-            inputs[i][1] = (Math.random() - 0.5) * 20.0
+            inputs[i][0] = random() + 0.0001
+            inputs[i][1] = random() + 0.0001
 
             if (creationCondition(inputs[i][0], inputs[i][1])) {
                 outputs[i][0] = 1
@@ -36,6 +37,7 @@ class SamplesNNMulti(
 
         return this
     }
+
 
     private fun creationCondition(x0: Double, x1: Double): Boolean {
         //return x0 + 7 > x1
